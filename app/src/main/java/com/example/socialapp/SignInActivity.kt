@@ -103,7 +103,8 @@ class SignInActivity : AppCompatActivity() {
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if(firebaseUser != null) {
 
-            val user = User(firebaseUser.uid, firebaseUser.displayName, firebaseUser.photoUrl.toString())
+            val user = com.example.socialapp.models.User(firebaseUser.uid,
+                firebaseUser.displayName.toString(), firebaseUser.photoUrl.toString())
             val usersDao = UserDao()
             usersDao.addUser(user)
 
