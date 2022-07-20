@@ -4,12 +4,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.socialapp.daos.PostDao
 import com.example.socialapp.models.Post
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.Query
-import kotlinx.android.synthetic.main.activity_main.*
+//import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), IPostAdapter {
 
@@ -36,8 +37,8 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
 
         adapter = PostAdapter(recyclerViewOptions, this)
 
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
+        findViewById<RecyclerView>(R.id.recyclerView).layoutManager = LinearLayoutManager(this)
     }
 
     override fun onStart() {
