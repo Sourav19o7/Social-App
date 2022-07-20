@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
 import com.example.socialapp.daos.UserDao
 import com.example.socialapp.models.User
@@ -14,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+//import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class SignInActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = Firebase.auth
 
-        findViewById<Button>(R.id.signInbutton).setOnClickListener {
+        findViewById<SignInButton>(R.id.signInbutton).setOnClickListener {
             signIn()
         }
 
@@ -65,28 +66,37 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        Log.i("Line", "69")
         if (requestCode == RC_SIGN_IN) {
+            Log.i("Line", "71")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            Log.i("Line", "73")
             handleSignInResult(task)
+        }
+        else
+        {
+            Log.i("Line", "$resultCode")
         }
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        Log.i("Line", "83")
         try {
+            Log.i("Line", "85")
             val account =
                 completedTask.getResult(ApiException::class.java)!!
-            Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+            Log.i("Line", "firebaseAuthWithGoogle:" + account.id)
+            Log.i("Line", "89")
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
-            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+            Log.i("Line", "signInResult:failed code=" + e.statusCode)
 
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        findViewById<Button>(R.id.signInbutton).visibility = View.GONE
+        findViewById<SignInButton>(R.id.signInbutton).visibility = View.GONE
         findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
         GlobalScope.launch(Dispatchers.IO) {
             val auth = auth.signInWithCredential(credential).await()
@@ -101,8 +111,7 @@ class SignInActivity : AppCompatActivity() {
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if(firebaseUser != null) {
 
-            val user = User(firebaseUser.uid,
-                firebaseUser.displayName.toString(), firebaseUser.photoUrl.toString())
+            val user = User(firebaseUser.uid, firebaseUser.displayName, firebaseUser.photoUrl.toString())
             val usersDao = UserDao()
             usersDao.addUser(user)
 
@@ -110,7 +119,7 @@ class SignInActivity : AppCompatActivity() {
             startActivity(mainActivityIntent)
             finish()
         } else {
-            findViewById<Button>(R.id.signInbutton).visibility = View.VISIBLE
+            findViewById<SignInButton>(R.id.signInbutton).visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
         }
     }

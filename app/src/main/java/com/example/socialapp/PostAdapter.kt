@@ -46,9 +46,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>, val listener: IPostAd
         val currentUserId = auth.currentUser!!.uid
         val isLiked = model.likedBy.contains(currentUserId)
         if(isLiked) {
-            holder.likeButton.setImageDrawable(ContextCompat.getDrawable(holder.likeButton.context, R.drawable.ic_baseline_favorite_border_24))
-        } else {
             holder.likeButton.setImageDrawable(ContextCompat.getDrawable(holder.likeButton.context, R.drawable.ic_liked))
+        } else {
+            holder.likeButton.setImageDrawable(ContextCompat.getDrawable(holder.likeButton.context, R.drawable.ic_baseline_favorite_border_24))
         }
 
     }
