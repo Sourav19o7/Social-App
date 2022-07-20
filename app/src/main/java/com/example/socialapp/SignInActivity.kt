@@ -20,9 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -103,7 +101,7 @@ class SignInActivity : AppCompatActivity() {
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if(firebaseUser != null) {
 
-            val user = com.example.socialapp.models.User(firebaseUser.uid,
+            val user = User(firebaseUser.uid,
                 firebaseUser.displayName.toString(), firebaseUser.photoUrl.toString())
             val usersDao = UserDao()
             usersDao.addUser(user)
